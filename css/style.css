@@ -1,0 +1,36 @@
+html{
+	height: 100%;
+}
+
+#clock{
+	text-align:center;
+	vertical-align: middle;
+	width:100%;
+	height: 40%;
+}
+
+#countdown {
+	font-size: 84px;
+}
+
+#pause-play-button {
+	font-size: 84px;
+}
+
+#info-box{
+	display: inline-block;
+	text-align: left;
+	border: 2px solid black;
+	border-radius: 30px;
+	background-color: #555;
+	height: 30%;
+	width: 60%;
+	padding: 10px;
+	font-size: 18px;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+li{
+	margin: 5px 0;
+}
