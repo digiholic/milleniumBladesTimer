@@ -2,19 +2,33 @@ html{
 	height: 100%;
 }
 
+body{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select:none;
+  user-select:none;
+  -o-user-select:none;
+}
+
+#clock-controls{
+	position: relative;
+	left: -50%;
+}
+
 #clock{
 	text-align:center;
 	vertical-align: middle;
 	width:100%;
 	height: 40%;
+	font-size: 84px;
 }
 
 #countdown {
-	font-size: 84px;
+	
 }
 
 #pause-play-button {
-	font-size: 84px;
+	
 }
 
 #info-box{
@@ -24,7 +38,9 @@ html{
 	border-radius: 30px;
 	background-color: #555;
 	height: 30%;
+	min-height: 200px;
 	width: 60%;
+	min-width: 800px;
 	padding: 10px;
 	font-size: 18px;
 	color: white;

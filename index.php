@@ -10,9 +10,17 @@
 	</header>
 
 	<body>
+		<div style="position:absolute; left:50%">
+			<div id="clock-controls">
+				<span class="glyphicon glyphicon-fast-backward" data-toggle="tooltip" title="Previous Phase"></span>
+				<span class="glyphicon glyphicon-backward" data-toggle="tooltip" title="Restart Phase"></span>
+				<span id="pause-play-button" class="glyphicon glyphicon-play" data-toggle="tooltip" title="Start/Stop timer"></span>
+				<span id="pause-play-button" class="glyphicon glyphicon-fast-forward" data-toggle="tooltip" title="Next Phase"></span>
+			</div>
+		</div>
+		
 		<div id="clock">
 			<span id="countdown" class="timer">7:00</span>
-			<button id="pause-play-button" class="glyphicon glyphicon-play" />
 		</div>
 		
 		<center><div id="info-box">
@@ -45,15 +53,17 @@
 	<footer>
 
 		<script>
-			
+		var timerLengths = [0,420,420,360,180];
+		
+		
 		var testSound = new Howl({
-			urls:['audio/test.mp3'],
+			urls:['audio/test.wav'],
 			loop: true
 		});
 			
 		var current_phase = 1;
 		var Clock = {
-		  totalSeconds: 20,
+		  totalSeconds: 5,
 
 		  start: function () {
 			var self = this;
@@ -78,13 +88,16 @@
 					self.totalSeconds--;
 				}
 				
-				document.getElementById('countdown').innerHTML = minutes + ":" +    remainingSeconds;
+				changeClockDisplay();
+				//document.getElementById('countdown').innerHTML = minutes + ":" +    remainingSeconds;
 			}, 1000);
 		  },
 
 		  pause: function () {
 			testSound.pause();
 			clearInterval(this.interval);
+			$('#pause-play-button').addClass('glyphicon-play');
+			$('#pause-play-button').removeClass('glyphicon-pause');
 			delete this.interval;
 		  },
 
@@ -97,22 +110,21 @@
 			testSound.stop();
 			$('#step-'+current_phase.toString()).hide();
 			current_phase = (current_phase % 4) + 1;
-			Clock.totalSeconds = 420;
+			Clock.totalSeconds = timerLengths[current_phase];
+			changeClockDisplay();
 			$('#step-'+current_phase.toString()).show();
 		}
-		/*
-		$("#typed").typed({
-            // strings: ["Typed.js is a <strong>jQuery</strong> plugin.", "It <em>types</em> out sentences.", "And then deletes them.", "Try it out!"],
-            stringsElement: $('#typed-strings'),
-            typeSpeed: 10,
-            contentType: 'html',
-            showCursor: false,
-            resetCallback: function() { newTyped(); }
-        });
 		
-		function newTyped(){ }
-		*/
-		
+		function changeClockDisplay(){
+			var minutes = Math.floor(Clock.totalSeconds / 60);
+			var remainingSeconds = (Clock.totalSeconds % 60);
+			
+			if (remainingSeconds < 10) {
+				remainingSeconds = "0" + remainingSeconds; 
+			}
+				
+			$('#countdown').html(minutes + ":" + remainingSeconds);
+		}
 		$(document).ready(function(){
 			$('#pause-play-button').click(function(){
 				if ($(this).hasClass('glyphicon-pause')){
@@ -123,12 +135,28 @@
 				$(this).toggleClass('glyphicon-pause');
 				$(this).toggleClass('glyphicon-play');
 			});
-			
-			/*$('#info-box').click(function(){
-				$('#typed').typed('stops');
-				$('#typed').html($('#typed-strings').html())
+			$('.glyphicon-backward').click(function(){
+				Clock.pause();
+				Clock.totalSeconds = timerLengths[current_phase];
+				changeClockDisplay();
 				
-			});*/
+			});
+			$('.glyphicon-fast-forward').click(function(){
+				Clock.pause();
+				endTimer();
+			});
+			$('.glyphicon-fast-backward').click(function(){
+				Clock.pause();
+				testSound.stop();
+				$('#step-'+current_phase.toString()).hide();
+				current_phase--;
+				if (current_phase == 0){
+					current_phase = 4;
+				}
+				Clock.totalSeconds = timerLengths[current_phase];
+				changeClockDisplay();
+				$('#step-'+current_phase.toString()).show();
+			});
 		});
 		</script>
 	</footer>
