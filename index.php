@@ -63,12 +63,14 @@
 			
 		var current_phase = 1;
 		var Clock = {
-		  totalSeconds: 5,
+		  totalSeconds: 420,
 
 		  start: function () {
 			var self = this;
 			testSound.play();
-				
+			$('#pause-play-button').addClass('glyphicon-pause');
+			$('#pause-play-button').removeClass('glyphicon-play');
+			
 			this.interval = setInterval(function () {
 				var minutes = Math.floor(self.totalSeconds / 60);
 				var remainingSeconds = (self.totalSeconds % 60);
@@ -103,6 +105,8 @@
 
 		  resume: function () {
 			if (!this.interval) this.start();
+			$('#pause-play-button').addClass('glyphicon-pause');
+			$('#pause-play-button').removeClass('glyphicon-play');
 		  }
 		};
 		
@@ -132,8 +136,6 @@
 				} else {
 					Clock.resume();
 				}
-				$(this).toggleClass('glyphicon-pause');
-				$(this).toggleClass('glyphicon-play');
 			});
 			$('.glyphicon-backward').click(function(){
 				Clock.pause();
