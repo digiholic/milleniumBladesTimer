@@ -4,6 +4,7 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css"></link>
 		
 		<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+		<script type="text/javascript" src="js/typed.js"></script>
 		<script type="text/javascript" src="js/bootstrap.js"></script>
 		<script type="text/javascript" src="js/howler.js"></script>
 	</header>
