@@ -5,55 +5,62 @@
 		
 		<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.js"></script>
 		<script type="text/javascript" src="js/howler.js"></script>
 	</header>
 
 	<body>
 		<div style="position:absolute; left:50%">
 			<div id="clock-controls">
-				<span class="glyphicon glyphicon-fast-backward" data-toggle="tooltip" title="Previous Phase"></span>
 				<span class="glyphicon glyphicon-backward" data-toggle="tooltip" title="Restart Phase"></span>
 				<span id="pause-play-button" class="glyphicon glyphicon-play" data-toggle="tooltip" title="Start/Stop timer"></span>
-				<span id="pause-play-button" class="glyphicon glyphicon-fast-forward" data-toggle="tooltip" title="Next Phase"></span>
+				<span id="mute-unmute-button" class="glyphicon glyphicon-volume-up" data-toggle="tooltip" title="Mute/Unmute music"></span>
 			</div>
 		</div>
 		
 		<div id="clock">
 			<span id="countdown" class="timer">7:00</span>
 		</div>
-		
-		<center><div id="info-box">
-			<div id="step-1">
-				<ul>Complete these steps, then begin the first timer!
-					
-					<li>Give each player 30 Millenium Dollars.</li>
-					<li>Deal each player 6 cards from the top of the store deck, face-down.</li>
-					<li>Place the top 9 cards of the store deck into the store area, face-down.</li>
-					<li>Discard all Metagame cards still in play. Reveal the Elemental Metagame card.</li>
-				</ul>
+		<center>
+			<div id="tab-box">
+				<span class="tab tab-1"><a href="#step-1">First Phase</a></span>
+				<span class="tab tab-2"><a href="#step-2">Second Phase</a></span>
+				<span class="tab tab-3"><a href="#step-3">Final Phase</a></span>
+				<span class="tab tab-4"><a href="#step-4">Grace Period</a></span>
 			</div>
-			<div id="step-2" style="display:none">
-				<ul>Complete these steps, then begin the second timer!
-					
-					<li>Give each player 6 more cards from the top of the store deck, face-down.</li>
-					<li>Reveal the Type Metagame card.</li>
-				</ul>
+			
+			<div id="info-box">
+				<div id="step-1">
+					<ul>Complete these steps, then begin the first timer!
+						
+						<li>Give each player 30 Millenium Dollars.</li>
+						<li>Deal each player 6 cards from the top of the store deck, face-down.</li>
+						<li>Place the top 9 cards of the store deck into the store area, face-down.</li>
+						<li>Discard all Metagame cards still in play. Reveal the Elemental Metagame card.</li>
+					</ul>
+				</div>
+				<div id="step-2" style="display:none">
+					<ul>Complete these steps, then begin the second timer!
+						
+						<li>Give each player 6 more cards from the top of the store deck, face-down.</li>
+						<li>Reveal the Type Metagame card.</li>
+					</ul>
+				</div>
+				<div id="step-3" style="display:none">
+					<p>This is the last opportunity to sell cards to the Aftermarket! If you have any cards you still want to sell, do it now! After everyone is ready, begin the final deckbuilding phase!</p>
+				</div>
+				<div id="step-4" style="display:none">
+					<p>Deckbuilding is over, and the tournament begins!<br/>
+					You can optionally give players an additional 3-minute grace period to finish deck construction. Otherwise, move on to the tournament!</p>
+				</div>
 			</div>
-			<div id="step-3" style="display:none">
-				<p>This is the last opportunity to sell cards to the Aftermarket! If you have any cards you still want to sell, do it now! After everyone is ready, begin the final deckbuilding phase!</p>
-			</div>
-			<div id="step-4" style="display:none">
-				<p>Deckbuilding is over, and the tournament begins!<br/>
-				You can optionally give players an additional 3-minute grace period to finish deck construction. Otherwise, move on to the tournament!</p>
-			</div>
-		</div></center>
+		</center>
 	</body>
 
 	<footer>
 
 		<script>
 		var timerLengths = [0,420,420,360,180];
-		
 		
 		var testSound = new Howl({
 			urls:['audio/test.wav'],
@@ -128,6 +135,18 @@
 				
 			$('#countdown').html(minutes + ":" + remainingSeconds);
 		}
+		
+		function loadStep(step){
+			testSound.stop();
+			$('#step-'+current_phase.toString()).hide();
+			current_phase = step;
+			Clock.totalSeconds = timerLengths[current_phase];
+			Clock.pause();
+			changeClockDisplay();
+			$('#step-'+current_phase.toString()).show();
+		
+		}
+		
 		$(document).ready(function(){
 			$('#pause-play-button').click(function(){
 				if ($(this).hasClass('glyphicon-pause')){
@@ -157,6 +176,22 @@
 				Clock.totalSeconds = timerLengths[current_phase];
 				changeClockDisplay();
 				$('#step-'+current_phase.toString()).show();
+			});
+			
+			$('#mute-unmute-button').click(function(){
+				$('#mute-unmute-button').toggleClass('glyphicon-volume-off');
+				$('#mute-unmute-button').toggleClass('glyphicon-volume-up');
+				if (Howler._muted){
+					Howler.unmute();
+				} else {
+					Howler.mute();
+				}
+			});
+			
+			$('.tab a').click(function(){
+				var str = this.getAttribute('href');
+				var num = str.replace( /^\D+/g, '');
+				loadStep(num);
 			});
 		});
 		</script>

@@ -31,6 +31,16 @@ body{
 	
 }
 
+#tab-box{
+	width:60%;
+	min-width: 800px;
+}
+
+.tab{
+	min-width: 24%;
+	display:inline-block;
+}
+
 #info-box{
 	display: inline-block;
 	text-align: left;
